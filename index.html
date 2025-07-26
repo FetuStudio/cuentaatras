@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cuenta atrás - 20 de agosto 2025</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background-color: #f0f0f0;
+    }
+    .countdown {
+      font-size: 2em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cuenta atars 20/08/2025 00:00</h1>
+  <div class="countdown" id="countdown"></div>
+
+  <script>
+    function updateCountdown() {
+      const countdownElement = document.getElementById('countdown');
+      const targetDate = new Date('2025-08-20T00:00:00+02:00'); // Madrid en horario de verano
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        countdownElement.innerHTML = "🎉 ¡Ya ha llegado el 20 de agosto de 2025!";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      countdownElement.innerHTML =
+        `${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
