@@ -13,20 +13,13 @@
 </head>
 <body>
 
-<h1>Contadores hasta las 00:00 horas de Madrid (4 - 15 agosto 2025)</h1>
+<h1>Contadores hasta las 00:00 horas de Madrid (4 - 20 agosto 2025)</h1>
 
-<div id="counters-container">
-  <!-- Aquí se agregarán los contadores -->
-</div>
+<div id="counters-container"></div>
 
 <script>
-// Zona horaria Madrid en agosto 2025 es CEST (UTC+2)
-const madridOffsetMinutes = 2 * 60; // +120 minutos
-
-// Crear los contadores para los días del 4 al 15 de agosto
 const startDay = 4;
-const endDay = 15;
-
+const endDay = 20;
 const container = document.getElementById('counters-container');
 
 function createCounter(day) {
@@ -40,15 +33,12 @@ function createCounter(day) {
 }
 
 function updateCountdown(day) {
-  // Crear la fecha objetivo en Madrid 00:00 del día correspondiente
-  // Construimos la fecha en UTC, ajustando el offset Madrid
-  // Fecha Madrid 00:00 = UTC 22:00 del día anterior (porque Madrid está UTC+2)
-  // Así que para 4 de agosto 00:00 Madrid, UTC es 3 de agosto 22:00
-  const utcDate = new Date(Date.UTC(2025, 7, day - 1, 22, 0, 0)); // mes 7 = agosto (0-based)
+  // Madrid está en UTC+2 en agosto
+  // 00:00 Madrid = 22:00 UTC del día anterior
+  const utcDate = new Date(Date.UTC(2025, 7, day - 1, 22, 0, 0)); // agosto es mes 7 (0-based)
   const now = new Date();
 
-  const diffMs = utcDate - now; // diferencia en milisegundos
-
+  const diffMs = utcDate - now;
   const countdownElem = document.getElementById(`countdown-${day}`);
 
   if (diffMs <= 0) {
@@ -62,15 +52,13 @@ function updateCountdown(day) {
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
-  countdownElem.textContent = 
-    `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  countdownElem.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
 for (let day = startDay; day <= endDay; day++) {
   createCounter(day);
 }
 
-// Actualizar los contadores cada segundo
 setInterval(() => {
   for (let day = startDay; day <= endDay; day++) {
     updateCountdown(day);
