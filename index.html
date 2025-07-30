@@ -1,48 +1,82 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Cuenta atrás - 20 de agosto 2025</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 50px;
-      background-color: #f0f0f0;
-    }
-    .countdown {
-      font-size: 2em;
-      color: #333;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contadores hasta 00:00 horas Madrid</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+  .counter { background: white; margin: 10px 0; padding: 15px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+  h2 { margin-bottom: 10px; }
+  .time { font-size: 1.5em; font-weight: bold; color: #333; }
+</style>
 </head>
 <body>
-  <h1>Cuenta atars 20/08/2025 00:00</h1>
-  <div class="countdown" id="countdown"></div>
 
-  <script>
-    function updateCountdown() {
-      const countdownElement = document.getElementById('countdown');
-      const targetDate = new Date('2025-08-20T00:00:00+02:00'); // Madrid en horario de verano
-      const now = new Date();
-      const diff = targetDate - now;
+<h1>Contadores hasta las 00:00 horas de Madrid (4 - 15 agosto 2025)</h1>
 
-      if (diff <= 0) {
-        countdownElement.innerHTML = "🎉 ¡Ya ha llegado el 20 de agosto de 2025!";
-        return;
-      }
+<div id="counters-container">
+  <!-- Aquí se agregarán los contadores -->
+</div>
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
+<script>
+// Zona horaria Madrid en agosto 2025 es CEST (UTC+2)
+const madridOffsetMinutes = 2 * 60; // +120 minutos
 
-      countdownElement.innerHTML =
-        `${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
-    }
+// Crear los contadores para los días del 4 al 15 de agosto
+const startDay = 4;
+const endDay = 15;
 
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-  </script>
+const container = document.getElementById('counters-container');
+
+function createCounter(day) {
+  const div = document.createElement('div');
+  div.className = 'counter';
+  div.innerHTML = `
+    <h2>Hasta el 00:00 del ${day} de agosto de 2025</h2>
+    <div class="time" id="countdown-${day}">Calculando...</div>
+  `;
+  container.appendChild(div);
+}
+
+function updateCountdown(day) {
+  // Crear la fecha objetivo en Madrid 00:00 del día correspondiente
+  // Construimos la fecha en UTC, ajustando el offset Madrid
+  // Fecha Madrid 00:00 = UTC 22:00 del día anterior (porque Madrid está UTC+2)
+  // Así que para 4 de agosto 00:00 Madrid, UTC es 3 de agosto 22:00
+  const utcDate = new Date(Date.UTC(2025, 7, day - 1, 22, 0, 0)); // mes 7 = agosto (0-based)
+  const now = new Date();
+
+  const diffMs = utcDate - now; // diferencia en milisegundos
+
+  const countdownElem = document.getElementById(`countdown-${day}`);
+
+  if (diffMs <= 0) {
+    countdownElem.textContent = '¡Ya llegó!';
+    return;
+  }
+
+  const totalSeconds = Math.floor(diffMs / 1000);
+  const days = Math.floor(totalSeconds / (3600 * 24));
+  const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  countdownElem.textContent = 
+    `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+for (let day = startDay; day <= endDay; day++) {
+  createCounter(day);
+}
+
+// Actualizar los contadores cada segundo
+setInterval(() => {
+  for (let day = startDay; day <= endDay; day++) {
+    updateCountdown(day);
+  }
+}, 1000);
+
+</script>
 </body>
 </html>
